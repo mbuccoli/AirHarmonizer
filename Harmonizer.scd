@@ -4,7 +4,7 @@
 //Server.local.options.outDevice = " MME : Cuffie (Audio Bluetooth)";
 Server.local.options.inDevice = "[Scarlett 2i2 USB]";
 Server.local.options.outDevice = "[Scarlett 2i2 USB]";
-ServerOptions.inDevices
+ServerOptions.outDevices
 
 // Player
 (
@@ -14,18 +14,21 @@ ServerOptions.inDevices
 		// p1, p2, p3 sono gli argomenti per i pitch;
 		// g1, g2, g3 sono gli argomenti per i gain
 		//arg p1 = 1.0, p2 = 1.0, p3 = 1.0, g1 = 1.0, g2 = 1.0, g3 = 1.0;
-		arg g1 =1.0, g2 = 1.0, g3 = 1.0, g4 = 1.0, g5 = 1.0;
+		//arg g1 =1.0, g2 = 1.0, g3 = 1.0, g4 = 1.0, g5 = 1.0;
+		arg g1 =0, g2 = 0, g3 = 0, g4 = 0, g5 = 0;
+
 		var wS=0.1;
-		var p1 =0.5, p2 = 0.75, p3 = 1.33, p4 = 1.5, p5 = 2;
+		var p1 =0.5, p2 = 0.75, p3 = 1.333333, p4 = 1.5, p5 = 2;
+		var out_signal;
 
 		// fai QUESTO se vuoi usare il file vocals (cambialo a seconda del tuo path assoluto
-		var infile="/Users/Clara/Desktop/AirHarmonizer/vocals.wav";
-		var b = Buffer.read(s, infile);
-		var input=PlayBuf.ar(2,b.bufnum,BufRateScale.kr(b.bufnum),loop:1);
+		//var infile="/Users/Clara/Desktop/AirHarmonizer/vocals.wav";
+		//var b = Buffer.read(s, infile);
+		//var input=PlayBuf.ar(2,b.bufnum,BufRateScale.kr(b.bufnum),loop:1);
 
 		// decommenta questo se vuoi invece l'input del microfono
 		//var input=AudioIn.ar([1,2]);
-		//var input=AudioIn.ar(1);
+		var input=AudioIn.ar(1);
 
 
 		//var o1=PitchShift.ar(input,windowSize:wS,pitchRatio:p1);
@@ -40,15 +43,12 @@ ServerOptions.inDevices
 
 
 		//var out_signal=input+(o1*g1)+(o2*g2)+(o3*g3);//o1+o2+o3;//
-		var out_signal=input*0.5+((o1*g1)+(o2*g2)+(o3*g3)+(o4*g4)+(o5*g5))*0.5;
+		out_signal=(input*0.2)+((o1*g1)+(o2*g2)+(o3*g3)+(o4*g4)+(o5*g5))*0.8;
+
 		//var out_signal=input*0.5+((o5*g5))*0.5;
-		g1.postln();
-		g2.postln();
-		g3.postln();
-		g4.postln();
-		g5.postln();
+
 		//var out_signal = input + o*g;
-		Out.ar(1, out_signal);
+		Out.ar([0,1], out_signal);
 
  }).add;
 )
@@ -105,13 +105,13 @@ OSCdef('OSCreceiver',
 		a.set(\g4, gg4);
 		a.set(\g5, gg5);
 
-		/*'aaa'.postln();
+		'aaa'.postln();
 		gg1.postln();
 		gg2.postln();
 		gg3.postln();
 		gg4.postln();
 		gg5.postln();
-		*/
+
 		/*var secondGrade=msg[1],
 		thirdGrade=msg[2],
 		fourthGrade=msg[3];

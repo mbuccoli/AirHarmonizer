@@ -8,8 +8,8 @@ NetAddress myRemoteLocation;
 
 Serial myPort;  // The serial port
 int dim = width;
-int w_canvas = 1200;
-int h_canvas = 600;
+int w_canvas = 1920;
+int h_canvas = 1080;
 color[] rectCol = new color[5];
 
 
@@ -18,7 +18,9 @@ void setup() {
   // List all the available serial ports
   printArray(Serial.list());
   // Open the port you are using at the rate you want:
-  myPort = new Serial(this, Serial.list()[4], 115200);
+  //myPort = new Serial(this, Serial.list()[4], 115200);
+  myPort = new Serial(this, Serial.list()[4], 9600);
+
   
   // Setup of OSC messaging
   /* start oscP5, listening for incoming messages at port 12000 */
@@ -27,7 +29,8 @@ void setup() {
   myRemoteLocation = new NetAddress("127.0.0.1",57120);
   
   // Visualization Setup
-  size(1200, 600);
+  //size(1200, 600);
+  fullScreen();
   background(0);
   colorMode(RGB);
   noStroke();
@@ -100,7 +103,6 @@ void draw() {
     myMessage.add((float)sensor[3]);
     myMessage.add((float)sensor[4]);
     oscP5.send(myMessage, myRemoteLocation); 
-    myMessage.print();
   }
 }
 
@@ -117,8 +119,8 @@ void draw() {
 void drawBar(int i, int hh){
     float x = ((w_canvas-80)/5)*i+80;
     float h = h_canvas;
-    float w = 80;
-    float y = map(hh,0,512,h_canvas,0);
+    float w = 200;
+    float y = map(hh,400,40,h_canvas,0);
     fill(rectCol[i]);
     rect(x,y,w,h);
 }
